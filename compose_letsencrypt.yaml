@@ -1,0 +1,29 @@
+name: app_containers
+
+services:
+  flask:
+    build: ./flask
+    container_name: flask
+    ports:
+     - 8080:8080
+     
+  certbot:
+    image: certbot/certbot:v4.0.0
+    container_name: certbot
+    volumes:
+      - ./reverse_proxy/certbot/conf:/etc/letsencrypt
+      - ./reverse_proxy/certbot/www:/var/www/certbot
+
+  nginx:
+    image: nginx:1.28.0-alpine-slim
+    container_name: nginx
+    volumes:
+      - ./reverse_proxy/nginx.conf:/etc/nginx/nginx.conf
+      - ./reverse_proxy/certbot/conf:/etc/letsencrypt
+      - ./reverse_proxy/certbot/www:/var/www/certbot
+    ports:
+      - 80:80
+      - 443:443
+    depends_on:
+      certbot:
+        condition: service_started
