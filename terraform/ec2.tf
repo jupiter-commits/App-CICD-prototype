@@ -32,7 +32,7 @@ resource "aws_instance" "public_server_docker" {
   }
 
   provisioner "local-exec" {
-    command = "ansible-playbook -i ${self.public_ip}, --private-key ${key_name}  ../ansible/main.yml"
+    command = "ansible-playbook -i ${self.public_ip}, --private-key ${key_name}  ../ansible/docker_compose.yml"
   }
 
 
@@ -62,7 +62,7 @@ resource "aws_instance" "public_server_jenkins" {
   }
 
   provisioner "local-exec" {
-    command = "ansible-playbook -i ${self.public_ip}, --private-key ${key_name}  ../ansible/main.yml"
+    command = "ansible-playbook -i ${self.public_ip}, --private-key ${key_name}  ../ansible/jenkins.yml"
   }
 
 

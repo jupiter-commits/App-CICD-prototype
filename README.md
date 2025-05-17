@@ -4,15 +4,8 @@ Practicing end to end cycle for DevOps
 **Project Diagram:**
 ![Project Diagram](images/diagram.png)
 
-**Redirecting HTTP to HTTPs:**
-![Redirection to HTTPS](images/redirection.png)
-
-**Demo showing container IP address:**
-![Demo](images/demo.png)
-
-
-image:
-docker.io/jupitercommits/app-cicd-prototype
+**Container image** of the flask app and gunicorn:
+[Docker Hub](https://docker.io/jupitercommits/app-cicd-prototype)
 
 No one can access the flask app directly (on port 5000) but need to access the WSGI server (Gunicorn) first
 
@@ -28,11 +21,13 @@ This project focuses on each module and integrating them, but to deploy this to 
 
 **What was automated:**
 
-- Containers for the app with Gunicorn and Nginx (using docker and docker-compose)
-- Ansible, Terraform, Prometheus
+- Container for the app with Gunicorn
+- Provisioning cloud infrastructure with Terraform
+- Configuration and setup using Ansible
+- Using Docker compose to run app image, Nginx, Prometheus, and Grafana
 
 
-# Screenshots:
+## Screenshots:
 
 Requisting gunicorn before adding nginx:
 ![](images/demo_gunicorn.png)
@@ -41,6 +36,7 @@ Requisting nginx:
 ![](images/demo_nginx.png)
 
 Redirection to HTTPS:
+
 ![](images/redirection.png)
 
 Configure Jenkins with GitHub repository:
@@ -54,3 +50,11 @@ Query on Prometheus:
 
 Dashboard on Grafana:
 ![](images/grafana_dashboard.png)
+
+
+## Useful commands:
+
+To generate a self signed certificate:
+``` bash
+openssl req -x509 -nodes -days 365 -newkey rsa:3072 -keyout ./reverse_proxy/self_signed/nginx.key -out ./reverse_proxy/self_signed/nginx.crt
+```
