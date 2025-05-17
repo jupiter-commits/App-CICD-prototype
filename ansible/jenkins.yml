@@ -1,0 +1,38 @@
+---
+- name: Setup Jenkins
+  hosts: all
+  become: true
+  vars:
+    jenkins_key: https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
+    jenkins_repository: deb https://pkg.jenkins.io/debian-stable binary/
+
+  tasks:
+    - name: Install Java (prerequisite)
+      ansible.builtin.apt:
+        name: default-jdk
+        state: present
+
+    - name: Import Jenkins repository key
+      ansible.builtin.apt_key:
+        url: '{{jenkins_key}}'
+        state: present
+
+    - name: Import Jenkins repository
+      ansible.builtin.apt_repository:
+        repo: '{{jenkins_repository}}'
+        state: present
+
+    - name: Install Jenkins
+      ansible.builtin.apt:
+        name: jenkins
+        state: present
+        update_cache: true
+
+    - name: Start Jenkins service
+      ansible.builtin.service:
+        name: jenkins
+        state: started
+        enabled: true
+
+- name: Install docker on Jenkins machine
+  import_playbook: docker_Setup.yml

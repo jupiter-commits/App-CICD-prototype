@@ -1,0 +1,20 @@
+---
+- name: Install docker on application machine
+  import_playbook: docker_Setup.yml
+
+- name: Run docker compose
+  hosts: all
+  become: true
+  tasks:
+
+    - name: Copy website files to Apache web server
+      ansible.builtin.copy:
+        src: ../compose.yml
+        dest: "/usr/share/flask_app"
+        owner: ec2-user
+        mode: u=rwx,g=rwx,o=r
+
+    - name: Start containers (docker-compose)
+      community.docker.docker_compose_v2:
+        project_src: /usr/share/flask_app
+        state: restarted
